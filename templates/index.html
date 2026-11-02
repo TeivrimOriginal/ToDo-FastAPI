@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+    <main class="card">
+        <h1>📝 Список задач</h1>
+
+        <form action="/add" method="post" class="add-form">
+            <input
+                type="text"
+                name="title"
+                placeholder="Что нужно сделать?"
+                required
+                autocomplete="off"
+                maxlength="200"
+            />
+            <button type="submit">Добавить</button>
+        </form>
+
+        {% if tasks %}
+        <ul class="task-list">
+            {% for task in tasks %}
+            <li class="task {% if task['done'] %}done{% endif %}">
+                <form action="/toggle/{{ task['id'] }}" method="post" class="inline">
+                    <button type="submit" class="check" title="Отметить">
+                        {% if task['done'] %}✔{% else %}○{% endif %}
+                    </button>
+                </form>
+                <span class="title">{{ task['title'] }}</span>
+                <form action="/delete/{{ task['id'] }}" method="post" class="inline">
+                    <button type="submit" class="delete" title="Удалить">✕</button>
+                </form>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="empty">Пока задач нет — самое время добавить первую 🚀</p>
+        {% endif %}
+    </main>
+</body>
+</html>
